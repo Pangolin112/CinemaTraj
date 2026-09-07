@@ -1,5 +1,10 @@
 # CinemaTraj: Composing Atomic Camera Trajectories for 3D Scenes with LLM Agents
 
+<p align="center">
+  <a href="https://cinematraj.github.io/"><img src="https://img.shields.io/badge/%F0%9F%8C%90%20Project%20Page-CinemaTraj-1a73e8?style=for-the-badge" alt="Project Page"></a>
+  <a href="https://arxiv.org/abs/2607.26910"><img src="https://img.shields.io/badge/arXiv-2607.26910-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white" alt="arXiv"></a>
+</p>
+
 Given a 3D scene and a natural language prompt, **CinemaTraj** decomposes the request into a sequence of cinematographic movements -- orbit, crane, dolly, pan, tilt, zoom, arc -- grounded in a 3D scene graph, and plans a collision-free camera trajectory through the scene. The resulting trajectory is rendered into a cinematic video with synchronized voiceover and subtitles.
 
 <p align="center">
