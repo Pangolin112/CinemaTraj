@@ -3,11 +3,7 @@
 Given a 3D scene and a natural language prompt, **CinemaTraj** decomposes the request into a sequence of cinematographic movements -- orbit, crane, dolly, pan, tilt, zoom, arc -- grounded in a 3D scene graph, and plans a collision-free camera trajectory through the scene. The resulting trajectory is rendered into a cinematic video with synchronized voiceover and subtitles.
 
 <p align="center">
-  <img src="assets/teaser.png" width="100%" alt="CinemaTraj teaser">
-</p>
-
-<p align="center">
-  <img src="assets/demo.gif" width="92%" alt="Side-by-side comparison with baselines">
+  <img src="assets/demo.gif" width="100%" alt="Side-by-side comparison with baselines">
   <br>
   <em>Rendered trajectories and camera paths for the same prompt &mdash; CCTG and
   ChatCam&nbsp;+&nbsp;GenDoP leave the free space and lose their targets, while ours
@@ -15,10 +11,6 @@ Given a 3D scene and a natural language prompt, **CinemaTraj** decomposes the re
 </p>
 
 ## Pipeline Overview
-
-<p align="center">
-  <img src="assets/pipeline.png" width="100%" alt="CinemaTraj pipeline">
-</p>
 
 ```
 User Prompt ──> User Prompt Translator ──> Anchor Selector ──> Parametric Atomic Trajectory Builder
@@ -38,44 +30,6 @@ User Prompt ──> User Prompt Translator ──> Anchor Selector ──> Param
 | **Parametric Atomic Trajectory Builder** | &sect;3.3 | Instantiates each atomic command as a parametric trajectory &tau;(t; &theta;<sub>fix</sub>, &theta;<sub>free</sub>) |
 | **Trajectory Optimizer** | &sect;3.4 | Two-pass gradient descent minimizing SDF-based collision (C<sub>sdf</sub>) and occlusion (C<sub>occl</sub>) costs |
 | **Subtitle & Voiceover Generator** | &sect;3.5 | Renders 3DGS frames, generates captions via VLM, synthesizes TTS voiceover |
-
----
-
-## Results
-
-Quantitative comparison and ablation on the ScanNet++ benchmark, fully-specified
-prompts. Best in **bold**, second best <ins>underlined</ins>.
-
-| Method | Motion MSE &darr; | CLaTr Score &uarr; | Collision Rate &darr; | Occlusion Rate &darr; | Coverage &uarr; |
-|---|---|---|---|---|---|
-| ChatCam + GenDoP | 7.741 | 19.461 | 0.209 | 0.580 | 0.661 |
-| CCTG | 9.143 | 24.031 | <ins>0.035</ins> | 0.516 | 0.700 |
-| w/o Anchor Selector | 7.055 | <ins>28.538</ins> | **0.023** | 0.579 | <ins>0.882</ins> |
-| w/o Parametric Traj. | 2.843 | 26.243 | 0.081 | **0.460** | 1.000 |
-| w/o SDF-based Opt. | <ins>1.841</ins> | 25.900 | 0.557 | 0.566 | 1.000 |
-| **CinemaTraj (Ours)** | **1.741** | **28.982** | 0.056 | <ins>0.503</ins> | **1.000** |
-
-### Comparison with baselines
-
-Our method produces smooth, collision-free trajectories that follow the requested
-camera movements, while both baselines penetrate scene geometry and
-ChatCam + GenDoP exhibits erratic motion. Red outlines mark failure frames.
-
-<p align="center">
-  <img src="assets/comparison.png" width="88%" alt="Qualitative comparison">
-</p>
-
-### Ablation
-
-Removing the Anchor Selector leads to incorrect object targeting; removing
-parametric trajectories yields unstructured paths; removing SDF optimization
-causes geometry collisions.
-
-<p align="center">
-  <img src="assets/ablation.png" width="80%" alt="Ablation visualization">
-</p>
-
-Reproduction commands for both tables are in &sect;4.
 
 ---
 
