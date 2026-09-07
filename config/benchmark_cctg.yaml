@@ -1,0 +1,26 @@
+# ══════════════════════════════════════════════════════════════════════
+# Berkeley CCTG Benchmark Configuration
+# ══════════════════════════════════════════════════════════════════════
+
+data_root: data/ScanNetpp/scenes
+output_root: outputs/benchmark_cctg
+prompts_file: outputs/benchmark_scannetpp/benchmark_prompts.json
+
+# Which prompt level to read from (IDs are stripped automatically)
+source_level: low_id
+
+# --- CCTG settings ---
+clip_model: "ViT-B/32"
+device: cuda
+images_subdir: "images"
+colmap_path: "colmap"
+
+# Trajectory generation
+top_k_per_segment: 1
+num_interpolation_steps: 60
+safety_threshold: 0.3
+max_refinement_iters: 50
+
+# Rendering
+render: true
+fps: 24

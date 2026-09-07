@@ -1,0 +1,25 @@
+# ══════════════════════════════════════════════════════════════════════
+# ChatCam + GenDoP Benchmark Configuration
+# ══════════════════════════════════════════════════════════════════════
+
+data_root: data/ScanNetpp/scenes
+output_root: outputs/benchmark_chatcam
+prompts_file: outputs/benchmark_scannetpp/benchmark_prompts.json
+
+# Which prompt level to read from (IDs are stripped automatically)
+source_level: low_id
+
+api_key: null   # set via env OPENAI_API_KEY or CLI --api_key
+
+# --- ChatCam settings ---
+llm_model: "gpt-4.1"
+clip_model: "ViT-B/32"
+device: cuda
+render: true
+refine_anchors: false
+gendop_convention: "opengl"
+fps: 24
+
+# --- GenDoP checkpoint ---
+cinegpt_resume: "third_party/GenDoP/checkpoints/text_directorial.safetensors"
+cinegpt_cond_mode: "text"

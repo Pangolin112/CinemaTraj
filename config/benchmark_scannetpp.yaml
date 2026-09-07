@@ -1,0 +1,83 @@
+# ══════════════════════════════════════════════════════════════════════
+# CinemaTraj Benchmark Configuration — ScanNet++ (Scene Graph Format)
+#   python src/eval/benchmark_runner.py --config config/benchmark_scannetpp.yaml
+# ══════════════════════════════════════════════════════════════════════
+
+# --- Format ---
+# "scene_graph" — OBB-based scene graph JSON (ScanNet++)
+# "legacy"      — InteriorGS labels.json with integer IDs and USD meshes
+format: "scene_graph"
+
+# --- Paths ---
+data_root: data/ScanNetpp/scenes
+output_root: outputs/benchmark_scannetpp
+project_root: .
+
+# Scene graph file location (relative to data_root/<scene_id>/)
+scene_graph_subdir: "dslr/sg"
+
+# 3DGS PLY file location (relative to data_root/<scene_id>/)
+ply_subdir: "dslr/ply"
+ply_filename: "point_cloud_30000.ply"
+
+# --- API ---
+# Omit to read $OPENAI_API_KEY, or pass --api_key on the command line.
+api_key: null
+
+# --- Scene selection ---
+max_scenes: 20
+
+# --- Prompt generation ---
+n_prompts_per_level: 2
+use_llm_prompts: false
+prompt_seed: 42
+include_id_levels: true         # generate medium_id and low_id levels
+# prompts_file: null            # set to path to reuse pre-generated prompts
+
+# --- Which levels to benchmark ---
+# Available: high, medium, medium_id, low, low_id
+# medium/low (without IDs) are ambiguous for ground-truth creation, so skip them.
+levels:
+  - high
+  - medium_id
+  - low_id
+
+# --- SDF ---
+# The runner overrides sdf.cache_dir with data_root/<scene_id>/dslr/sdf so the
+# grid is built once per scene and shared across runs.
+sdf:
+  resolution: 128
+  force_rebuild: false
+  padding: 0.5
+
+# --- Trajectory ---
+trajectory:
+  smooth_window: 5
+  transition_frames: 30
+  reorder: auto
+
+# --- Optimisation ---
+optimisation:
+  verbose: true
+  anchor_collision_margin: 0.10
+  debug_candidates: false
+
+# --- Subtitles ---
+subtitles:
+  language: en
+  device: cuda
+
+# --- Render ---
+render:
+  fps: 30
+  width: 1920
+  height: 1080
+  fov_y: 60.0
+  gaussian_scale: 1.0
+  show_bboxes: false
+  show_subtitles: false
+  output_format: mp4
+
+# --- Visualisation ---
+visualise:
+  enabled: false

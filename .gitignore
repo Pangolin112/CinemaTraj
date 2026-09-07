@@ -1,0 +1,32 @@
+__pycache__
+*.pyc
+*.egg
+*.egg-info
+build
+dist
+*.so
+
+.vscode
+.claude
+CLAUDE.md
+*.ipynb
+tmp_*
+workspace*
+
+# Run artefacts
+outputs/
+
+# Datasets — see README "Data" (ScanNet++ requires its own licence)
+data/
+
+# Model weights, fetched by the scripts referenced in the README
+CLaTr/checkpoints/
+third_party/GenDoP/checkpoints/
+*.ckpt
+*.pth
+*.safetensors
+
+# Vendored third-party sample assets we do not redistribute
+third_party/GenDoP/dataset/DATA/
+third_party/GenDoP/dataset/download/
+baselines/ChatCam_GenDoP/suppl/

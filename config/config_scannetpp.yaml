@@ -1,0 +1,79 @@
+# ──────────────────────────────────────────────────────────────
+# CinemaTraj Pipeline Configuration — ScanNet++ (Scene Graph Format)
+# Single-scene run:
+#   python src/pipeline/cinematraj_pipeline.py --config config/config_scannetpp.yaml
+# ──────────────────────────────────────────────────────────────
+
+# --- Scene & Prompt ---
+# Available scenes: 09c1414f1b, 2c7c10379b, 0eba3981c9, 1cefb55d50, 0cf2e9402d,
+#   0d2ee665be, 5f99900f09, 21d970d8de, 6115eddb86, 0a7cc12c0e, 00a231a370,
+#   0b031f3119, 0dce89ab21, 00dd871005, 0e75f3c4d9, 0f0191b10b, 1b75758486,
+#   1bb93d185e, 1c7a683c92, 4e0b8cbd33
+scene_id: "09c1414f1b"
+prompt: "First, hold a static shot of the sink (id: sink_0), then pan right at the microwave (id: microwave_0), and finally move in closer to the window (id: window_0)."
+
+# OpenAI key for the LLM planner (§3.2) and the VLM captioner (§3.5).
+# Leave null to fall back to $OPENAI_API_KEY for the planner; note that
+# `render.show_subtitles: true` reads this field directly, so set it here
+# if you want LLM-generated subtitles.
+api_key: null
+
+# --- Format ---
+# "scene_graph" — OBB-based scene graph JSON (ScanNet++)
+# "legacy"      — InteriorGS labels.json with integer IDs and USD meshes
+format: "scene_graph"
+
+# --- Data Paths ---
+# For scene_graph format: data_root/<scene_id>/<subdir>/<filename>
+data_root: "data/ScanNetpp/scenes"
+project_root: "."
+output_dir: "outputs/scannetpp/"
+
+# Scene graph file location (relative to data_root/<scene_id>/)
+scene_graph_subdir: "dslr/sg/"
+
+# 3DGS PLY file location (relative to data_root/<scene_id>/)
+ply_subdir: "dslr/ply"
+ply_filename: "point_cloud_30000.ply"
+
+# --- Trajectory ---
+trajectory:
+  transition_frames: 30          # Interpolation frames between segments
+  reorder: "auto"                # "auto" / "always" / "never"
+  smooth_window: 5               # Smoothing window size
+
+# --- SDF Creation ---
+sdf:
+  resolution: 128                # Voxel resolution for SDF grid
+  padding: 0.5                   # Padding around mesh bounds
+  force_rebuild: false           # Rebuild SDF even if cached .npz exists
+  # cache_dir: "data/ScanNetpp/scenes/09c1414f1b/dslr/sdf"
+  #   ↑ optional: reuse the precomputed per-scene SDF instead of building one
+  #     under output_dir (the benchmark/ablation runners set this automatically)
+
+# --- Optimisation ---
+optimisation:
+  verbose: true
+  anchor_collision_margin: 0.10   # SDF margin in meters (lower = more permissive)
+  debug_candidates: false
+
+# --- Subtitles ---
+subtitles:
+  language: "en"                 # en / zh / de / ja / fr / es / ko
+  device: "cuda"
+
+# --- Rendering ---
+render:
+  width: 1920
+  height: 1080
+  fov_y: 60.0
+  fps: 30.0
+  gaussian_scale: 1.0
+  show_bboxes: false
+  show_subtitles: false          # true → VLM captions burned into the video
+  output_format: "mp4"           # mp4 | avi | frames
+
+# --- Visualisation ---
+visualise:
+  enabled: false                 # true → serve an interactive viser scene
+  port: 8080

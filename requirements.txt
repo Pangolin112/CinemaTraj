@@ -1,0 +1,42 @@
+# ── Core pipeline ────────────────────────────────────────────────────
+# Install torch first with the CUDA build that matches your GPU, e.g.
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# gsplat has no prebuilt wheel for recent torch/CUDA combos and compiles its
+# CUDA kernels on first use, so it needs nvcc plus a host compiler that nvcc
+# accepts (CUDA 12.8 supports GCC <= 14).
+numpy
+torch
+gsplat
+trimesh
+embreex        # trimesh.ray.ray_pyembree backend — required by anchor_selector
+rtree          # trimesh.proximity fallback — required when SDF checking is off
+scipy
+openai
+PyYAML
+opencv-python
+plyfile
+tqdm
+Pillow
+matplotlib
+scikit-image
+viser
+meshlib
+
+# ── Evaluation (src/eval/eval.py — CLaTr score) ──────────────────────
+# CLaTr itself is reimplemented inline; only the checkpoints are external.
+# pip install git+https://github.com/openai/CLIP.git
+ftfy
+regex
+
+# ── Ablations ────────────────────────────────────────────────────────
+# no_anchor      needs CLIP (above)
+# no_parametric  needs third_party/GenDoP + baselines/ChatCam_GenDoP
+# transformers/diffusers are version-locked together: diffusers >= 0.35 needs
+# transformers >= 4.48, which GenDoP's checkpoint loader is not compatible with.
+transformers==4.47.1
+diffusers==0.34.0
+accelerate
+safetensors
+tyro==0.7.3
+kiui
+megfile
